@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Color Finder</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .color-box {
+            height: 200px;
+            width: 200px;
+            margin-bottom: 1rem;
+        }
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+        }
+        .spring-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .summer-image {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .autumn-image {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        .winter-image {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto my-8 text-center">
+        <h1 class="text-4xl font-bold mb-4">Personal Color Finder</h1>
+        <input type="file" accept="image/*" id="image-input" class="mb-4">
+        <div class="image-container">
+            <div class="color-box bg-blue-500" id="color-box"></div>
+            <div class="spring-image">
+                <img src="" alt="Spring" id="spring-image">
+            </div>
+            <div class="summer-image">
+                <img src="" alt="Summer" id="summer-image">
+            </div>
+            <div class="autumn-image">
+                <img src="" alt="Autumn" id="autumn-image">
+            </div>
+            <div class="winter-image">
+                <img src="" alt="Winter" id="winter-image">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
+    <script src="https://cdn.jsdelivr.net/npm/colorthief"></script>
+    <script>
+        const imageInput = document.getElementById('image-input');
+        const colorBox = document.getElementById('color-box');
+        const springImage = document.getElementById('spring-image');
+        const summerImage = document.getElementById('summer-image');
+        const autumnImage = document.getElementById('autumn-image');
+        const winterImage = document.getElementById('winter-image');
+
+        imageInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const image = document.createElement('img');
+                image.src = URL.createObjectURL(file);
+                image.onload = async () => {
+                    URL.revokeObjectURL(image.src);
+                    colorBox.style.backgroundImage = `url(${image.src})`;
+                    springImage.src = image.src;
+                    summerImage.src = image.src;
+                    autumnImage.src = image.src;
+                    winterImage.src = image.src;
+                };
+            }
+        });
+    </script>
+</body>
+</html>
