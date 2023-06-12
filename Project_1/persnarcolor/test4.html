@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Color Finder</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .color-box {
+            height: 200px;
+            width: 200px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto my-8 text-center">
+        <h1 class="text-4xl font-bold mb-4">Personal Color Finder</h1>
+        <div class="flex justify-center items-center">
+            <div class="color-box bg-blue-500" id="color-box"></div>
+        </div>
+        <div class="flex justify-center items-center mt-8">
+            <div class="w-1/4">
+                <label for="warmtone-radio" class="block text-lg mb-2">Warm Tone</label>
+                <input type="radio" name="tone" value="warm" id="warmtone-radio">
+            </div>
+            <div class="w-1/4">
+                <label for="colltone-radio" class="block text-lg mb-2">Cool Tone</label>
+                <input type="radio" name="tone" value="cool" id="colltone-radio">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const colorBox = document.getElementById('color-box');
+        const warmToneRadio = document.getElementById('warmtone-radio');
+        const coolToneRadio = document.getElementById('colltone-radio');
+
+        warmToneRadio.addEventListener('change', () => {
+            colorBox.style.backgroundImage = "linear-gradient(45deg, #FF7F50, #FFD700)";
+        });
+
+        coolToneRadio.addEventListener('change', () => {
+            colorBox.style.backgroundImage = "linear-gradient(45deg, #6495ED, #00BFFF)";
+        });
+    </script>
+</body>
+</html>

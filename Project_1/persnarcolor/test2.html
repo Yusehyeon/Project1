@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Color Finder</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .color-box {
+            height: 100px;
+            width: 100px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        #image-preview {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto my-8 text-center">
+        <h1 class="text-4xl font-bold mb-4">Personal Color Finder</h1>
+        <p class="text-lg mb-4">Find your personal color palette!</p>
+        <input type="file" accept="image/*" id="image-input" class="mb-4">
+        <div id="image-preview"></div>
+        <div class="flex flex-wrap justify-center">
+            <div class="color-box bg-pink-500"></div> <!-- 봄(Spring) 대표색 -->
+            <div class="color-box bg-blue-500"></div> <!-- 여름(Summer) 대표색 -->
+            <div class="color-box bg-yellow-500"></div> <!-- 가을(Autumn) 대표색 -->
+            <div class="color-box bg-purple-500"></div> <!-- 겨울(Winter) 대표색 -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
+    <script src="https://cdn.jsdelivr.net/npm/colorthief"></script>
+    <script>
+        const imageInput = document.getElementById('image-input');
+        const imagePreview = document.getElementById('image-preview');
+
+        imageInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const image = document.createElement('img');
+                image.src = URL.createObjectURL(file);
+                image.onload = async () => {
+                    URL.revokeObjectURL(image.src);
+                    imagePreview.innerHTML = '';
+                    imagePreview.appendChild(image);
+
+                    // 얼굴 인식 및 색상 추출
+                    const faceDetector = await faceLandmarksDetection.load(
+                        faceLandmarksDetection.SupportedPackages.mediapipeFacemesh
+                    );
+                    const faceLandmarks = await faceDetector.estimateFaces({
+                        input: image,
+                    });
+
+                    if (faceLandmarks.length > 0) {
+                        const colorThief = new ColorThief();
+                        const skinColor = colorThief.getColor(image);
+                        const eyeColor = getAverageColor(faceLandmarks[0].annotations.leftEyeIris.concat(faceLandmarks[0].annotations.rightEyeI
