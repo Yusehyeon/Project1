@@ -1,25 +1,3 @@
-function recommendMusic() {
-  const genres = Array.from(document.getElementsByName("genre"))
-    .filter((genre) => genre.checked)
-    .map((genre) => genre.value);
-
-  if (genres.length === 0) {
-    alert("장르를 선택해주세요.");
-    return;
-  }
-
-  const musicList = document.getElementById("music-list");
-  musicList.innerHTML = "";
-
-  for (const genre of genres) {
-    const listItem = document.createElement("li");
-    listItem.textContent = `${genre}: ${getRecommendedMusic(genre)}`;
-    musicList.appendChild(listItem);
-  }
-
-  document.getElementById("recommended-music").classList.remove("hidden");
-}
-
 function arrangeCheckboxes() {
   const checkboxesContainer = document.getElementById("genre-checkboxes");
   const checkboxes = checkboxesContainer.getElementsByTagName("label");
@@ -32,35 +10,52 @@ function arrangeCheckboxes() {
   }
 }
 
+function recommendMusic() {
+  const checkboxes = document.querySelectorAll('input[name="genre"]:checked');
+  const selectedGenres = Array.from(checkboxes).map(
+    (checkbox) => checkbox.value
+  );
+
+  const musicData = {
+    ballad: ["노래1", "노래2", "노래3"],
+    dance: ["노래4", "노래5", "노래6"],
+    rap_hiphop: ["노래7", "노래8", "노래9"],
+    idol: ["노래10", "노래11", "노래12"],
+    RnB_soul: ["노래13", "노래14", "노래15"],
+    pop: ["노래16", "노래17", "노래18"],
+  };
+
+  const musicList = document.getElementById("music-list");
+  musicList.innerHTML = "";
+
+  selectedGenres.forEach((genre) => {
+    const genreMusic = musicData[genre];
+    if (genreMusic) {
+      const genreTitle = document.createElement("h3");
+      genreTitle.textContent = genre;
+      musicList.appendChild(genreTitle);
+
+      genreMusic.forEach((song) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = song;
+        musicList.appendChild(listItem);
+      });
+    }
+  });
+
+  const recommendedMusic = document.getElementById("recommended-music");
+  recommendedMusic.classList.remove("hidden");
+}
+
 document
   .getElementById("recommend-btn")
   .addEventListener("click", recommendMusic);
-document.addEventListener("DOMContentLoaded", arrangeCheckboxes);
-window.addEventListener("resize", arrangeCheckboxes);
 
-function getRecommendedMusic(genre) {
-  switch (genre) {
-    case "rock":
-      return "Queen - Bohemian Rhapsody , 박완규 - 사랑";
-    case "pop":
-      return "Michael Jackson - Thriller";
-    case "rap/hip-hop":
-      return "Eminem - Lose Yourself";
-    case "ballad":
-      return "박재정 - 헤어지자 말해요";
-    case "R&B/soul":
-      return "";
-    case "idol":
-      return "";
-    case "dnace":
-      return "";
-    case "classic":
-      return "";
-    case "jazz":
-      return "";
-    case "musical":
-      return "";
-    default:
-      return "";
-  }
-}
+// 페이지 로드 시 체크박스 정렬
+arrangeCheckboxes();
+
+// 체크박스 변경 시 정렬
+const checkboxes = document.querySelectorAll('input[name="genre"]');
+checkboxes.forEach((checkbox) => {
+  checkbox.addEventListener("change", arrangeCheckboxes);
+});
